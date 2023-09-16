@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: Roman Yakimenko
+  - include:
+      file: db/changelog/tables/create-table-user.yaml
+  - include:
+      file: db/changelog/tables/create-carrier-table.yaml

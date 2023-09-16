@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-carrier-table.1
+      author: Roman Yakimenko
+      preConditions:
+        - not:
+            tableExists:
+              tableName: carriers
+      changes:
+        - createTable:
+            tableName: carriers
+            columns:
+              - column:
+                  name: carrier_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: carrier_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: carriers
+            indexName: CARRIER_NAME_INDEX
+            columns:
+              - column:
+                  name: carrier_name
