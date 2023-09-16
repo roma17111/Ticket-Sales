@@ -6,3 +6,7 @@ databaseChangeLog:
       file: db/changelog/tables/create-table-user.yaml
   - include:
       file: db/changelog/tables/create-carrier-table.yaml
+  - include:
+      file: db/changelog/tables/create-route-table.yaml
+  - include:
+      file: db/changelog/tables/create-ticket-table.yaml

@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tickets-table.1
+      author: Roamn Yakimenko
+      preConditions:
+        - not:
+            tableExists:
+              tableName: tickets
+      changes:
+        - createTable:
+            tableName: tickets
+            columns:
+              - column:
+                  name: ticket_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: route_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_date
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: seat_number
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: buy_date
+                  type: DATETIME
+        - createIndex:
+            tableName: tickets
+            columns:
+              - column:
+                  name: departure_date
+            indexName: INDEX_DEPARTURE_DATE
+        - addForeignKeyConstraint:
+            baseTableName: tickets
+            baseColumnNames: route_id
+            constraintName: ROUTE_FOREIGN_KEY
+            referencedTableName: routes
+            referencedColumnNames: route_id
+        - addForeignKeyConstraint:
+            baseTableName: tickets
+            baseColumnNames: user_id
+            constraintName: USER_FOREIGN_KEY
+            referencedTableName: users
+            referencedColumnNames: user_id
+  - changeSet:
+      id: add-column-price.1
+      author: Roman Yakimenko
+      changes:
+        - addColumn:
+            tableName: tickets
+            columns:
+              - column:
+                  name: price
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+

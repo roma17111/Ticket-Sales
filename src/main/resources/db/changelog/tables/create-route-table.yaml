@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-routes-teble.1
+      author: admin
+      preConditions:
+        - not:
+            tableExists:
+              tableName: routes
+      changes:
+        - createTable:
+            tableName: routes
+            columns:
+              - column:
+                  name: route_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: departure_point
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: destination
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: carrier_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration_in_minutes
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: routes
+            indexName: DESTINATION_INDEX
+            columns:
+              - column:
+                  name: destination
+        - addForeignKeyConstraint:
+            baseColumnNames: carrier_id
+            constraintName: CARRIER_COLUMN
+            referencedTableName: carriers
+            referencedColumnNames: carrier_id
+            baseTableName: routes
