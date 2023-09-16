@@ -1,4 +1,4 @@
-package ru.service.ticketsales.repository.rowmappers;
+package ru.service.ticketsales.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.service.ticketsales.models.Route;
 import ru.service.ticketsales.repository.CarrierRepository;
+import ru.service.ticketsales.repository.rowmappers.RouteRowMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,7 +21,8 @@ public class RouteRepository {
         long carrierId = carrierRepository.save(route.getCarrier());
         String sql = "INSERT INTO routes(departure_point,destination, " +
                 "carrier_id, duration_in_minutes) " +
-                "values(:departure_point, :destination, :carrier_id, :duration_in_minutes)";
+                "values(:departure_point, :destination, :carrier_id, :duration_in_minutes)" +
+                "returning route_id";
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("departure_point", route.getDeparturePoint())
                 .addValue("destination", route.getDestination())

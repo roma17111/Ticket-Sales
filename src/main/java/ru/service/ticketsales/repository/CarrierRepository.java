@@ -30,17 +30,17 @@ public class CarrierRepository {
 
     public Long createCarrier(Carrier carrier) {
         String sql = "INSERT INTO carriers(carrier_name, phone_number)" +
-                "values(:carrier_name, :phone_number)";
+                "values(:carrier_name, :phone_number) returning carrier_id";
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("carrier_name", carrier.getCarrierName())
-                .addValue("phone_nember", carrier.getPhoneNumber());
+                .addValue("phone_number", carrier.getPhoneNumber());
         return jdbcTemplate.queryForObject(sql, source, Long.class);
     }
 
     public Long updateCarrier(Carrier carrier) {
         String sql = "update carriers set " +
                 "carrier_name = :carrier_name," +
-                "phone_number = :phone_nember " +
+                "phone_number = :phone_number " +
                 "where carrier_id = :carrier_id";
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("carrier_id", carrier.getCarrierId())

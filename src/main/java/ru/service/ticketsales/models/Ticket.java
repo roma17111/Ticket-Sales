@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Ticket {
 
-    long ticket_id;
+    long ticketId;
     Route route;
     LocalDateTime departureDate;
     String seatNumber;
