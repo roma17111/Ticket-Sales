@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.service.ticketsales.dto.TicketDto;
 import ru.service.ticketsales.models.Ticket;
 
-@Component
 @Mapper(componentModel = "spring")
 public interface TicketMapper {
 
