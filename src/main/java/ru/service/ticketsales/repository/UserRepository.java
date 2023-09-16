@@ -1,6 +1,7 @@
 package ru.service.ticketsales.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -16,6 +17,24 @@ import java.util.Map;
 public class UserRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final UserRowMapper userRowMapper;
+
+
+    public void save(UserBuyer userBuyer) {
+        UserBuyer buyer = findByLogin(userBuyer.getLogin());
+        if (buyer == null) {
+            createUser(userBuyer);
+        } else {
+            updateUser(UserBuyer.builder()
+                    .userId(buyer.getUserId())
+                    .password(userBuyer.getPassword())
+                    .login(userBuyer.getLogin())
+                    .firstName(userBuyer.getFirstName())
+                    .lastName(userBuyer.getLastName())
+                    .secondName(userBuyer.getSecondName())
+                    .build());
+        }
+    }
 
     public Long createUser(UserBuyer userBuyer) {
         String sql = "INSERT INTO users(login, password, first_name, last_name, second_name)" +
@@ -51,16 +70,24 @@ public class UserRepository {
 
 
     public UserBuyer findByLogin(String login) {
-        String sql = "SELECT * FROM users WHERE login = :login";
-        SqlParameterSource parameterSource = new MapSqlParameterSource("login", login);
-        return jdbcTemplate.queryForObject(sql, parameterSource, new UserRowMapper());
+        try {
+            String sql = "SELECT * FROM users WHERE login = :login";
+            SqlParameterSource parameterSource = new MapSqlParameterSource("login", login);
+            return jdbcTemplate.queryForObject(sql, parameterSource, this.userRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public UserBuyer findById(Long id) {
-        String sql = "SELECT * FROM users WHERE user_id = :user_id";
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("user_id", id);
-        return jdbcTemplate.queryForObject(sql, parameterSource, new UserRowMapper());
+        try {
+            String sql = "SELECT * FROM users WHERE user_id = :user_id";
+            MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+            parameterSource.addValue("user_id", id);
+            return jdbcTemplate.queryForObject(sql, parameterSource, this.userRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public void deleteById(long id) {
