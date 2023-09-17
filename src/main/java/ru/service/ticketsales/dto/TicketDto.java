@@ -1,5 +1,6 @@
 package ru.service.ticketsales.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AccessLevel;
@@ -20,6 +21,7 @@ public class TicketDto {
     LocalDateTime departureDate;
     String seatNumber;
     long price;
+    @JsonIgnore
     UserBuyerDto user;
     LocalDateTime buyDate;
 }

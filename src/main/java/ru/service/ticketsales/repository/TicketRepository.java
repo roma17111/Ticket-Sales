@@ -10,9 +10,7 @@ import ru.service.ticketsales.models.UserBuyer;
 import ru.service.ticketsales.repository.rowmappers.TicketRowMapper;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -59,34 +57,34 @@ public class TicketRepository {
         }
     }
 
-    public List<Ticket> findAll(long page) {
+    public List<Ticket> findAllforSale(long page) {
         long pageResult = page - 1;
         long offset = pageResult * 20;
-        String sql = "SELECT * FROM tickets offset :ofset limit 20";
+        String sql = "SELECT * FROM tickets WHERE user_id IS NULL offset :ofset limit 20";
         MapSqlParameterSource source = new MapSqlParameterSource()
                 .addValue("ofset", offset);
         return jdbcTemplate.query(sql, source, this.ticketRowMapper);
     }
 
-    public List<Ticket> findAll() {
-        String sql = "SELECT * FROM tickets";
+    public List<Ticket> findAllforSale() {
+        String sql = "SELECT * FROM tickets WHERE user_id IS NULL";
         return jdbcTemplate.query(sql, this.ticketRowMapper);
     }
 
-    public List<Ticket> getAllSaleTicketsByCareerName(String careerName, long page) {
-        List<Ticket> tickets = findAll(page);
+    public List<Ticket> getAllTicketsByCareerName(String careerName, long page) {
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
                         .getRoute()
                         .getCarrier()
                         .getCarrierName().toLowerCase()
-                        .startsWith(careerName) && el.getUser() == null)
+                        .startsWith(careerName))
                 .collect(Collectors.toList());
     }
 
     public List<Ticket> findAllTicketsByDateDeparture(LocalDateTime localDateTime,
                                                       long page) {
-        List<Ticket> tickets = findAll(page);
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el.getDepartureDate().equals(localDateTime))
                 .collect(Collectors.toList());
@@ -95,7 +93,7 @@ public class TicketRepository {
 
     public List<Ticket> findAllTicketsByRouteDeparture(String departurePoint,
                                                        long page) {
-        List<Ticket> tickets = findAll(page);
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
                         .getRoute()
@@ -108,7 +106,7 @@ public class TicketRepository {
 
     public List<Ticket> findAllTicketsByDestination(String destination,
                                                     long page) {
-        List<Ticket> tickets = findAll(page);
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
                         .getRoute()
@@ -122,7 +120,7 @@ public class TicketRepository {
     public List<Ticket> findAllByDepartureAndDestination(String departure,
                                                          String destination,
                                                          long page) {
-        List<Ticket> tickets = findAll(page);
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
                         .getRoute()
@@ -142,7 +140,7 @@ public class TicketRepository {
     public List<Ticket> findAllByDepartureDateAndDeparturePoint(LocalDateTime localDateTime,
                                                                 String departure,
                                                                 long page) {
-        List<Ticket> tickets = findAll(page);
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
 
@@ -159,9 +157,9 @@ public class TicketRepository {
     }
 
     public List<Ticket> findAllByDepartureDateAndDestinationPoint(LocalDateTime localDateTime,
-                                                                String destination,
-                                                                long page) {
-        List<Ticket> tickets = findAll(page);
+                                                                  String destination,
+                                                                  long page) {
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
 
@@ -181,7 +179,7 @@ public class TicketRepository {
                                             String destination,
                                             String departure,
                                             long page) {
-        List<Ticket> tickets = findAll(page);
+        List<Ticket> tickets = findAllforSale(page);
         return tickets.stream()
                 .filter(el -> el
                         .getRoute()
@@ -201,6 +199,23 @@ public class TicketRepository {
                                 .getDepartureDate()
                                 .equals(dateTime))
                 .collect(Collectors.toList());
+    }
+
+    public void buyTicket(long userId, long ticketId) {
+        String sql = "UPDATE  tickets SET " +
+                "buy_date = now()," +
+                "user_id = :user_id " +
+                "WHERE ticket_id = :ticket_id";
+        MapSqlParameterSource source = new MapSqlParameterSource()
+                .addValue("user_id", userId)
+                .addValue("ticket_id", ticketId);
+        jdbcTemplate.update(sql, source);
+    }
+
+    public List<Ticket> getUserTickets(long userId) {
+        String sql = "SELECT * FROM tickets WHERE user_id = :user_id";
+        MapSqlParameterSource source = new MapSqlParameterSource("user_id", userId);
+        return jdbcTemplate.query(sql, source,this.ticketRowMapper);
     }
 
 }

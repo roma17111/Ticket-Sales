@@ -36,7 +36,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAnyAuthority('BUYER')")
+    @PreAuthorize("hasAnyAuthority('BUYER','ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/all")
     public ResponseEntity<?> findAll() {
