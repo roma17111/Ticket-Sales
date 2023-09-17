@@ -119,5 +119,88 @@ public class TicketRepository {
 
     }
 
+    public List<Ticket> findAllByDepartureAndDestination(String departure,
+                                                         String destination,
+                                                         long page) {
+        List<Ticket> tickets = findAll(page);
+        return tickets.stream()
+                .filter(el -> el
+                        .getRoute()
+                        .getDestination()
+                        .toLowerCase()
+                        .startsWith(destination)
+
+                        &&
+
+                        el.getRoute()
+                                .getDeparturePoint()
+                                .toLowerCase()
+                                .startsWith(departure))
+                .collect(Collectors.toList());
+    }
+
+    public List<Ticket> findAllByDepartureDateAndDeparturePoint(LocalDateTime localDateTime,
+                                                                String departure,
+                                                                long page) {
+        List<Ticket> tickets = findAll(page);
+        return tickets.stream()
+                .filter(el -> el
+
+                        .getRoute()
+                        .getDeparturePoint()
+                        .toLowerCase()
+                        .startsWith(departure)
+                        &&
+
+                        el
+                                .getDepartureDate()
+                                .equals(localDateTime))
+                .collect(Collectors.toList());
+    }
+
+    public List<Ticket> findAllByDepartureDateAndDestinationPoint(LocalDateTime localDateTime,
+                                                                String destination,
+                                                                long page) {
+        List<Ticket> tickets = findAll(page);
+        return tickets.stream()
+                .filter(el -> el
+
+                        .getRoute()
+                        .getDestination()
+                        .toLowerCase()
+                        .startsWith(destination)
+                        &&
+
+                        el
+                                .getDepartureDate()
+                                .equals(localDateTime))
+                .collect(Collectors.toList());
+    }
+
+    public List<Ticket> findAllByFullFilter(LocalDateTime dateTime,
+                                            String destination,
+                                            String departure,
+                                            long page) {
+        List<Ticket> tickets = findAll(page);
+        return tickets.stream()
+                .filter(el -> el
+                        .getRoute()
+                        .getDestination()
+                        .toLowerCase()
+                        .startsWith(destination)
+
+                        &&
+
+                        el.getRoute()
+                                .getDeparturePoint()
+                                .toLowerCase()
+                                .startsWith(departure)
+                        &&
+
+                        el
+                                .getDepartureDate()
+                                .equals(dateTime))
+                .collect(Collectors.toList());
+    }
 
 }

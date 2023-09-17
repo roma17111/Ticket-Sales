@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.service.ticketsales.dto.RegisterDto;
+import ru.service.ticketsales.exceptions.InvalidLoginException;
 import ru.service.ticketsales.models.UserBuyer;
 import ru.service.ticketsales.repository.UserRepository;
 import ru.service.ticketsales.security.*;
@@ -27,7 +28,10 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder encoder;
 
-    public void register(RegisterDto register) {
+    public boolean register(RegisterDto register) throws InvalidLoginException {
+        if (userRepository.findByLogin(register.getLogin())!=null) {
+            throw new InvalidLoginException("Логин уже занят!!!");
+        }
         UserBuyer buyer = UserBuyer.builder()
                 .login(register.getLogin())
                 .password(encoder.encode(register.getPassword()))
@@ -37,6 +41,7 @@ public class AuthService {
                 .build();
         long userId = userRepository.createUser(buyer);
         userRepository.addRole(Role.BUYER, userId);
+        return true;
     }
 
     public List<UserBuyer> findAll() {

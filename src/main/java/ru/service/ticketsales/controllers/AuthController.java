@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.service.ticketsales.dto.ErrorResponseDto;
 import ru.service.ticketsales.dto.RegisterDto;
+import ru.service.ticketsales.exceptions.InvalidLoginException;
 import ru.service.ticketsales.security.JwtRequest;
 import ru.service.ticketsales.security.JwtResponse;
 import ru.service.ticketsales.security.RefreshJwtRequest;
@@ -20,9 +22,17 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
+    @ResponseBody
     public ResponseEntity<?> register(@RequestBody RegisterDto dto) {
-        System.out.println(dto);
-        authService.register(dto);
+        try {
+            authService.register(dto);
+        } catch (InvalidLoginException e) {
+            return ResponseEntity.status(400)
+                    .body(ErrorResponseDto.builder()
+                            .codeStatus(400)
+                            .message(e.getMessage())
+                            .build());
+        }
         return ResponseEntity.ok().build();
     }
 
