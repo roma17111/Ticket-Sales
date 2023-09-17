@@ -33,5 +33,29 @@ public class TicketService {
         return ticketRepository.findAllTicketsByDestination(destination, page);
     }
 
+    public List<Ticket> getAllByFullFilter(LocalDateTime dateDeparture,
+                                           String destination,
+                                           String departure,
+                                           long page) {
+        return ticketRepository.findAllByFullFilter(dateDeparture,
+                destination, departure, page);
+    }
+
+    public List<Ticket> getAllByDeparturePointAndDestination(String departure,
+                                                        String destination,
+                                                        long page) {
+        return ticketRepository.findAllByDepartureAndDestination(departure, destination, page);
+    }
+    public List<Ticket> getAllByDepartureDateAndDestination(LocalDateTime departureDate,
+                                                        String destination,
+                                                        long page) {
+        return ticketRepository.findAllByDepartureDateAndDestinationPoint(departureDate, destination, page);
+    }
+    public List<Ticket> getAllByDepartureDateAndDeparturePoint(LocalDateTime departureDate,
+                                                            String departure,
+                                                            long page) {
+        return ticketRepository.findAllByDepartureDateAndDeparturePoint(departureDate, departure, page);
+    }
+
 
 }

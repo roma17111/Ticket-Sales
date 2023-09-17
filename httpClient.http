@@ -1,2 +1,12 @@
-http://locallhost:8080/api/v1/all
-Authentication-Control: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY5NDk1MzcxNiwicm9sZVNldCI6WyJCVVlFUiJdLCJmaXJzdE5hbWUiOiJzdHJpbmcifQ.Hq2JSz8MD_9Dz_kcrlebEHbVJ5sd4MTYoXwETMyHO9iwxPAyql5dWRlSo4W0CwIOJbv8KNiMhJeSoCAU-AgI-Q
+POST http://locallhost:8080/api/v1/login
+Content-Type: application/json
+
+{
+  "login": "admin",
+  "password": "12345"
+}
+
+###
+GET http://locallhost:8080/api/v1/all
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY5NDk2MTc2MSwicm9sZVNldCI6WyJCVVlFUiJdLCJmaXJzdE5hbWUiOiJzdHJpbmcifQ.n-5Z0wwrSbLenTno7wdQv-NVa6OqeFJaMLbR9VCddajLVAa_P_8LUm-QXteVRPfu9FGsHPvE7hwRbNBw3UTOgg
+
