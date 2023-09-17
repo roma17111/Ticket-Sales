@@ -70,5 +70,13 @@ public class CarrierRepository {
         }
     }
 
+    public void deleteById(long carrierId) {
+        String sql = "DELETE  FROM carriers WHERE carrier_id = :carrier_id";
+        MapSqlParameterSource source = new MapSqlParameterSource("carrier_id", carrierId);
+
+        jdbcTemplate.update(sql, source);
+
+    }
+
 
 }

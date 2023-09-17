@@ -43,10 +43,13 @@ public class TicketController {
         }
     }
 
+
     @GetMapping("my")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasAnyAuthority('BUYER','ADMIN')")
     public ResponseEntity<List<TicketDto>> getUserTickets() {
         return ResponseEntity.ok(ticketService.getUserTickets());
     }
+
+
 }

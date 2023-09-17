@@ -80,7 +80,7 @@ public class UserRepository {
         }
     }
 
-    public UserBuyer findById(Long id) {
+    public UserBuyer findById(long id) {
         try {
             String sql = "SELECT * FROM users WHERE user_id = :user_id";
             MapSqlParameterSource parameterSource = new MapSqlParameterSource();

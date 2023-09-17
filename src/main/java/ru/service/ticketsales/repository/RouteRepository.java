@@ -9,6 +9,8 @@ import ru.service.ticketsales.models.Route;
 import ru.service.ticketsales.repository.CarrierRepository;
 import ru.service.ticketsales.repository.rowmappers.RouteRowMapper;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class RouteRepository {
@@ -57,6 +59,18 @@ public class RouteRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public void deleteById(long routeId) {
+        String sql = "DELETE FROM routes WHERE route_id = :route_id";
+        MapSqlParameterSource source = new MapSqlParameterSource("route_id",routeId);
+        jdbcTemplate.update(sql, source);
+    }
+
+    public List<Route> findAllByCarrierId(long carrierId) {
+        String sql = "SELECT * FROM routes WHERE carrier_id = :carrier_id";
+        MapSqlParameterSource source = new MapSqlParameterSource("carrier_id", carrierId);
+        return jdbcTemplate.query(sql, source, this.routeRowMapper);
     }
 
 }

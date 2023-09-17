@@ -218,4 +218,16 @@ public class TicketRepository {
         return jdbcTemplate.query(sql, source,this.ticketRowMapper);
     }
 
+    public void deleteById(long ticketId) {
+        String sql = "DELETE FROM tickets WHERE ticket_id = :ticket_id";
+        MapSqlParameterSource source = new MapSqlParameterSource("ticket_id", ticketId);
+        jdbcTemplate.update(sql, source);
+    }
+
+    public List<Ticket> findAllByRouteId(long routeId) {
+        String sql = "SELECT * FROM tickets WHERE route_id = :route_id";
+        MapSqlParameterSource source = new MapSqlParameterSource("route_id", routeId);
+        return jdbcTemplate.query(sql, source, this.ticketRowMapper);
+    }
+
 }
