@@ -10,3 +10,5 @@ databaseChangeLog:
       file: db/changelog/tables/create-route-table.yaml
   - include:
       file: db/changelog/tables/create-ticket-table.yaml
+  - include:
+      file: db/changelog/tables/create-role-table.yaml

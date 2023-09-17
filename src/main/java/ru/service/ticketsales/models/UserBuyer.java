@@ -2,6 +2,9 @@ package ru.service.ticketsales.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.service.ticketsales.security.Role;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +19,5 @@ public class UserBuyer {
     String firstName;
     String lastName;
     String secondName;
+    Set<Role> rolesSet;
 }

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-roles-table.1
+      author: Roman Yakimenko
+      preConditions:
+        - not:
+            tableExists:
+              tableName: roles
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: role
+                  type: VARCHAR(15)
