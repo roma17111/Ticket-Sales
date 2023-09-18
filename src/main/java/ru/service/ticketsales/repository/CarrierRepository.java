@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.service.ticketsales.models.Carrier;
 import ru.service.ticketsales.repository.rowmappers.CarrierRowMapper;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class CarrierRepository {
@@ -75,8 +77,13 @@ public class CarrierRepository {
         MapSqlParameterSource source = new MapSqlParameterSource("carrier_id", carrierId);
 
         jdbcTemplate.update(sql, source);
-
     }
 
-
+    public List<Carrier> findAll(long page) {
+        long pageResult = page - 1;
+        long offset = pageResult * 20;
+        String sql = "SELECT * FROM carriers offset :offset limit 20";
+        MapSqlParameterSource source = new MapSqlParameterSource("offset",offset);
+        return jdbcTemplate.query(sql, source, this.carrierRowMapper);
+    }
 }

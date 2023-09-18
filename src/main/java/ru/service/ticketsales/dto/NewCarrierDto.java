@@ -1,20 +1,18 @@
 package ru.service.ticketsales.dto;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class CarrierDto {
+@Getter
+public class NewCarrierDto {
 
-    long carrierId;
-    String carrierName;
+    String name;
 
     @Pattern(regexp = "^\\+?[1-9][0-9]{7,14}$")
     String phoneNumber;
