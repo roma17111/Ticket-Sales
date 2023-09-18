@@ -33,7 +33,14 @@ public class TicketService {
         if (ticket.getUser() != null) {
             throw new TicketIsBuyedException("Билет уже куплен!!!");
         }
-        ticketRepository.buyTicket(userId,ticketId);
+        ticketRepository.buyTicket(userId, ticketId);
+    }
+
+    public List<TicketDto> findAllForSale(long page) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+
+        ticketRepository.findAllforSale(page).forEach(el -> ticketDtos.add(ticketMapper.toDto(el)));
+        return ticketDtos;
     }
 
     public List<TicketDto> getUserTickets() {
@@ -45,43 +52,73 @@ public class TicketService {
         return ticketDtos;
     }
 
-    public List<Ticket> findAllByDate(LocalDateTime dateTime,
-                                      long page) {
-        return ticketRepository.findAllTicketsByDateDeparture(dateTime, page);
+    public List<TicketDto> findAllByDate(LocalDateTime dateTime,
+                                         long page) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        ticketRepository.findAllTicketsByDateDeparture(dateTime, page).forEach(
+                el -> ticketDtos.add(ticketMapper.toDto(el))
+        );
+        return ticketDtos;
     }
 
-    public List<Ticket> findAllByDeparture(String departure,
-                                           long page) {
-        return ticketRepository.findAllTicketsByRouteDeparture(departure, page);
+    public List<TicketDto> findAllByDeparture(String departure,
+                                              long page) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        ticketRepository.findAllTicketsByRouteDeparture(departure, page).forEach(
+                el -> ticketDtos.add(ticketMapper.toDto(el))
+        );
+        return ticketDtos;
     }
 
-    public List<Ticket> findAllByDestination(String destination,
-                                             long page) {
-        return ticketRepository.findAllTicketsByDestination(destination, page);
+    public List<TicketDto> findAllByDestination(String destination,
+                                                long page) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        ticketRepository.findAllTicketsByDestination(destination, page).forEach(
+                el -> ticketDtos.add(ticketMapper.toDto(el))
+        );
+        return ticketDtos;
     }
 
-    public List<Ticket> getAllByFullFilter(LocalDateTime dateDeparture,
-                                           String destination,
-                                           String departure,
-                                           long page) {
-        return ticketRepository.findAllByFullFilter(dateDeparture,
-                destination, departure, page);
+    public List<TicketDto> getAllByFullFilter(LocalDateTime dateDeparture,
+                                              String destination,
+                                              String departure,
+                                              long page) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        ticketRepository.findAllByFullFilter(dateDeparture,
+                destination, departure, page).forEach(
+                el -> ticketDtos.add(ticketMapper.toDto(el))
+        );
+        return ticketDtos;
     }
 
-    public List<Ticket> getAllByDeparturePointAndDestination(String departure,
-                                                        String destination,
-                                                        long page) {
-        return ticketRepository.findAllByDepartureAndDestination(departure, destination, page);
+    public List<TicketDto> getAllByDeparturePointAndDestination(String departure,
+                                                                String destination,
+                                                                long page) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        ticketRepository.findAllByDepartureAndDestination(departure, destination, page).forEach(
+                el -> ticketDtos.add(ticketMapper.toDto(el))
+        );
+        return ticketDtos;
     }
-    public List<Ticket> getAllByDepartureDateAndDestination(LocalDateTime departureDate,
-                                                        String destination,
-                                                        long page) {
-        return ticketRepository.findAllByDepartureDateAndDestinationPoint(departureDate, destination, page);
+
+    public List<TicketDto> getAllByDepartureDateAndDestination(LocalDateTime departureDate,
+                                                               String destination,
+                                                               long page) {
+        List<TicketDto> tickets = new ArrayList<>();
+        ticketRepository.findAllByDepartureDateAndDestinationPoint(departureDate, destination, page).forEach(
+                el -> tickets.add(ticketMapper.toDto(el))
+        );
+        return tickets;
     }
-    public List<Ticket> getAllByDepartureDateAndDeparturePoint(LocalDateTime departureDate,
-                                                            String departure,
-                                                            long page) {
-        return ticketRepository.findAllByDepartureDateAndDeparturePoint(departureDate, departure, page);
+
+    public List<TicketDto> getAllByDepartureDateAndDeparturePoint(LocalDateTime departureDate,
+                                                                  String departure,
+                                                                  long page) {
+        List<TicketDto> tickets = new ArrayList<>();
+        ticketRepository.findAllByDepartureDateAndDeparturePoint(departureDate, departure, page).forEach(
+                el -> tickets.add(ticketMapper.toDto(el))
+        );
+        return tickets;
     }
 
 

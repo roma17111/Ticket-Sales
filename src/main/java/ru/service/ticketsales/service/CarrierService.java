@@ -23,14 +23,11 @@ public class CarrierService {
     public void deleteByCarrierId(long carrierId) throws CarrierNotFoundException {
         Carrier carrier = carrierRepository.findById(carrierId);
         if (carrier == null) {
-            throw new CarrierNotFoundException("Билет не найден");
+            throw new CarrierNotFoundException("Перевозчик не найден!");
         }
         List<Route> routes = routeRepository.findAllByCarrierId(carrierId);
         if (routes == null || routes.size() == 0) {
-            if (carrier != null) {
                 carrierRepository.deleteById(carrierId);
-                return;
-            }
         } else {
             routes.forEach(route -> {
                 List<Ticket> tickets = ticketRepository.findAllByRouteId(route.getRouteId());
@@ -46,4 +43,6 @@ public class CarrierService {
             carrierRepository.deleteById(carrierId);
         }
     }
+
+
 }

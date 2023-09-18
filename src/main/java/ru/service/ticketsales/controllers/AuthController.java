@@ -13,11 +13,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.service.ticketsales.dto.ErrorResponseDto;
 import ru.service.ticketsales.dto.RegisterDto;
+import ru.service.ticketsales.dto.UserBuyerDto;
 import ru.service.ticketsales.exceptions.InvalidLoginException;
 import ru.service.ticketsales.security.JwtRequest;
 import ru.service.ticketsales.security.JwtResponse;
 import ru.service.ticketsales.security.RefreshJwtRequest;
 import ru.service.ticketsales.service.AuthService;
+import ru.service.ticketsales.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -25,6 +30,7 @@ import ru.service.ticketsales.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/register")
     @ResponseBody
@@ -54,8 +60,8 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Недостаточно прав доступа")
     })
-    public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(authService.findAll());
+    public ResponseEntity<List<UserBuyerDto>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping("/login")

@@ -24,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketController {
 
-    private final TicketRepository ticketRepository;
     private final TicketService ticketService;
 
     @GetMapping("/all/{page}")
@@ -39,8 +38,8 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<?> findAllForSale(@PathVariable long page) {
-        return ResponseEntity.ok(ticketRepository.findAllforSale(page));
+    public ResponseEntity<List<TicketDto>> findAllForSale(@PathVariable long page) {
+        return ResponseEntity.ok(ticketService.findAllForSale(page));
     }
 
     @PostMapping("/buy")
@@ -90,11 +89,11 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByDepartureDate(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByDepartureDate(@PathVariable long page,
                                                               @RequestParam LocalDateTime dateTime) {
         return ResponseEntity
-                .ok(ticketRepository
-                        .findAllTicketsByDateDeparture(dateTime, page));
+                .ok(ticketService
+                        .findAllByDate(dateTime, page));
     }
 
     @GetMapping("/filter/route/departure/{page}")
@@ -110,11 +109,11 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByDeparturePoint(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByDeparturePoint(@PathVariable long page,
                                                                @RequestParam String departure) {
         return ResponseEntity
-                .ok(ticketRepository
-                        .findAllTicketsByRouteDeparture(departure, page));
+                .ok(ticketService
+                        .findAllByDeparture(departure, page));
     }
 
     @GetMapping("/filter/route/destination/{page}")
@@ -130,10 +129,10 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByDestinationPoint(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByDestinationPoint(@PathVariable long page,
                                                                  @RequestParam String destination) {
-        return ResponseEntity.ok(ticketRepository
-                        .findAllTicketsByDestination(destination, page));
+        return ResponseEntity.ok(ticketService
+                        .findAllByDestination(destination, page));
     }
 
     @GetMapping("/filter/{page}")
@@ -149,13 +148,13 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByAllParameters(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByAllParameters(@PathVariable long page,
                                                               @RequestParam LocalDateTime departureDate,
                                                               @RequestParam String departurePoint,
                                                               @RequestParam String destinationPoint) {
         return ResponseEntity
-                .ok(ticketRepository
-                        .findAllByFullFilter(departureDate,
+                .ok(ticketService
+                        .getAllByFullFilter(departureDate,
                                 destinationPoint,
                                 departurePoint,
                                 page));
@@ -175,12 +174,11 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByFullRoute(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByFullRoute(@PathVariable long page,
                                                           @RequestParam String departurePoint,
                                                           @RequestParam String destinationPoint) {
-        return ResponseEntity
-                .ok(ticketRepository
-                        .findAllByDepartureAndDestination(departurePoint, destinationPoint, page));
+        return ResponseEntity.ok(ticketService
+                        .getAllByDeparturePointAndDestination(departurePoint, destinationPoint, page));
     }
 
     @GetMapping("/filter/dep/{page}")
@@ -196,12 +194,12 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByDepartureDateAndRoute(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByDepartureDateAndRoute(@PathVariable long page,
                                                                       @RequestParam LocalDateTime departureDate,
                                                                       @RequestParam String departurePoint) {
         return ResponseEntity
-                .ok(ticketRepository
-                        .findAllByDepartureDateAndDeparturePoint(departureDate,
+                .ok(ticketService
+                        .getAllByDepartureDateAndDeparturePoint(departureDate,
                                 departurePoint,
                                 page));
     }
@@ -220,12 +218,12 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
     })
-    public ResponseEntity<List<Ticket>> filterByDepartureDateAndDestinationRoute(@PathVariable long page,
+    public ResponseEntity<List<TicketDto>> filterByDepartureDateAndDestinationRoute(@PathVariable long page,
                                                                                  @RequestParam LocalDateTime departureDate,
                                                                                  @RequestParam String destinationPoint) {
         return ResponseEntity
-                .ok(ticketRepository
-                        .findAllByDepartureDateAndDestinationPoint(departureDate,
+                .ok(ticketService
+                        .getAllByDepartureDateAndDestination(departureDate,
                                 destinationPoint,
                                 page));
     }
