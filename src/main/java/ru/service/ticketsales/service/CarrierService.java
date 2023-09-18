@@ -2,7 +2,7 @@ package ru.service.ticketsales.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.RouteMatcher;
+import ru.service.ticketsales.exceptions.CarrierNotFoundException;
 import ru.service.ticketsales.models.Carrier;
 import ru.service.ticketsales.models.Route;
 import ru.service.ticketsales.models.Ticket;
@@ -10,7 +10,6 @@ import ru.service.ticketsales.repository.CarrierRepository;
 import ru.service.ticketsales.repository.RouteRepository;
 import ru.service.ticketsales.repository.TicketRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -21,8 +20,11 @@ public class CarrierService {
     private final TicketRepository ticketRepository;
     private final RouteRepository routeRepository;
 
-    public void deleteByCarrierId(long carrierId) {
+    public void deleteByCarrierId(long carrierId) throws CarrierNotFoundException {
         Carrier carrier = carrierRepository.findById(carrierId);
+        if (carrier == null) {
+            throw new CarrierNotFoundException("Билет не найден");
+        }
         List<Route> routes = routeRepository.findAllByCarrierId(carrierId);
         if (routes == null || routes.size() == 0) {
             if (carrier != null) {
@@ -32,7 +34,6 @@ public class CarrierService {
         } else {
             routes.forEach(route -> {
                 List<Ticket> tickets = ticketRepository.findAllByRouteId(route.getRouteId());
-                System.out.println(tickets);
                 if (tickets == null || tickets.size() == 0) {
                     routeRepository.deleteById(route.getRouteId());
                 } else {
