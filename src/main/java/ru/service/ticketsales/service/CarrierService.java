@@ -56,7 +56,7 @@ public class CarrierService {
                     routeRepository.deleteById(route.getRouteId());
                 } else {
                     tickets.forEach(ticket -> {
-                        ticketRepository.deleteById(ticket.getTicketId());
+                        ticketRepository.deleteByRouteId(route.getRouteId());
                         routeRepository.deleteById(route.getRouteId());
                     });
                 }

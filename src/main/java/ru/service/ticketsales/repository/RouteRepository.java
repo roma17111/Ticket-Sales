@@ -73,4 +73,12 @@ public class RouteRepository {
         return jdbcTemplate.query(sql, source, this.routeRowMapper);
     }
 
+    public List<Route> findAll(long page) {
+        long pageResult = page - 1;
+        long offset = pageResult * 20;
+        String sql = "SELECT * FROM routes offset :offset limit 20";
+        MapSqlParameterSource source = new MapSqlParameterSource("offset",offset);
+        return jdbcTemplate.query(sql, source, this.routeRowMapper);
+    }
+
 }
