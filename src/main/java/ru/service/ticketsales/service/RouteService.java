@@ -26,7 +26,7 @@ public class RouteService {
     public void deleteRouteById(long routeId) throws RouteNotFoundException {
         Route route = routeRepository.findById(routeId);
         if (route == null) {
-            throw new RouteNotFoundException("Перевозчик не найден!!!");
+            throw new RouteNotFoundException("Маршрут не найден!!!");
         } else {
             List<Ticket> tickets = ticketRepository.findAllByRouteId(routeId);
             if (tickets == null || tickets.size() == 0) {
@@ -56,11 +56,14 @@ public class RouteService {
         routeRepository.save(route);
     }
 
-    public void update(RouteDto route) {
+    public void update(RouteDto route) throws RouteNotFoundException {
+        if (routeRepository.findById(route.getRouteId()) == null) {
+            throw new  RouteNotFoundException("Маршрут не найден");
+        }
         routeRepository.updateRoute(routeMapper.toRoute(route));
     }
 
-    public List<RouteDto> findAll(long page) {
+    public List<RouteDto>   findAll(long page) {
         List<RouteDto> routeDtos = new ArrayList<>();
         routeRepository.findAll(page).forEach(
                 el -> routeDtos.add(routeMapper.toDto(el))
