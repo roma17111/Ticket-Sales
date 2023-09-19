@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/routes")
 @RequiredArgsConstructor
+@Slf4j
 public class RouteController {
 
     private final RouteService routeService;
@@ -51,6 +53,7 @@ public class RouteController {
         try {
             routeService.update(routeDto);
         } catch (RouteNotFoundException e) {
+            log.error(e.getMessage(),e);
             return ResponseEntity.status(400).body(ErrorResponseDto.builder()
                     .codeStatus(400)
                     .message(e.getMessage())
@@ -73,6 +76,7 @@ public class RouteController {
         try {
             routeService.deleteRouteById(routeId);
         } catch (RouteNotFoundException e) {
+            log.error(e.getMessage(),e);
             return ResponseEntity.status(400).body(ErrorResponseDto.builder()
                     .codeStatus(400)
                     .message(e.getMessage())

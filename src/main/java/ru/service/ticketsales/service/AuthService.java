@@ -2,8 +2,10 @@ package ru.service.ticketsales.service;
 
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
+import jakarta.validation.constraints.Size;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -41,6 +44,7 @@ public class AuthService {
                 .build();
         long userId = userRepository.createUser(buyer);
         userRepository.addRole(Role.BUYER, userId);
+        log.info("Пользователь успешно зарегистрировался");
         return true;
     }
 

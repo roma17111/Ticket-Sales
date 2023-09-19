@@ -1,6 +1,7 @@
 package ru.service.ticketsales.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.service.ticketsales.dto.CarrierDto;
 import ru.service.ticketsales.dto.NewCarrierDto;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CarrierService {
 
     private final CarrierRepository carrierRepository;
@@ -38,6 +40,7 @@ public class CarrierService {
             throw new CarrierAlreadyExistsException("Такой перевозчик уже существует!");
         } else {
             carrierRepository.createCarrier(carrierMap);
+            log.info("Пользователь добавлен - " + carrierMap);
         }
     }
 
@@ -62,6 +65,7 @@ public class CarrierService {
                 }
             });
             carrierRepository.deleteById(carrierId);
+            log.info("Пользователь удалён -" + carrier);
         }
     }
 
@@ -71,6 +75,7 @@ public class CarrierService {
         } else {
             carrierRepository.updateCarrier(carrierMapper.toCarrier(carrier));
         }
+        log.info("Пользователь изменён -" + carrier);
         return carrier;
     }
 

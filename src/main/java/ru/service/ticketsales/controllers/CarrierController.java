@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/carriers")
 @RequiredArgsConstructor
+@Slf4j
 public class CarrierController {
 
     private final CarrierService carrierService;
@@ -60,6 +62,7 @@ public class CarrierController {
         try {
             newCarrier = carrierService.updateCarrier(carrierDto);
         } catch (CarrierNotFoundException e) {
+            log.error(e.getMessage(),e);
             return ResponseEntity
                     .status(400)
                     .body(ErrorResponseDto.builder()
@@ -86,6 +89,7 @@ public class CarrierController {
         try {
             carrierService.deleteByCarrierId(carrierId);
         } catch (CarrierNotFoundException e) {
+            log.error(e.getMessage(),e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
                     .codeStatus(400)
                     .message(e.getMessage())

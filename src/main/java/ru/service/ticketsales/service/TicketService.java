@@ -1,9 +1,11 @@
 package ru.service.ticketsales.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.service.ticketsales.dto.EditTicketDto;
 import ru.service.ticketsales.dto.TicketDto;
+import ru.service.ticketsales.exceptions.TIcketNotFoundException;
 import ru.service.ticketsales.exceptions.TicketIsBuyedException;
 import ru.service.ticketsales.mappers.TicketMapper;
 import ru.service.ticketsales.models.Ticket;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TicketService {
 
     private final AuthService authService;
@@ -34,11 +37,12 @@ public class TicketService {
             throw new TicketIsBuyedException("Билет уже куплен!!!");
         }
         ticketRepository.buyTicket(userId, ticketId);
+        log.info("Пользователь - " + user + " купил билет - " + ticket);
     }
 
     public List<TicketDto> findAllForSale(long page) {
         List<TicketDto> ticketDtos = new ArrayList<>();
-
+        System.out.println(ticketRepository.findAllforSale(page));
         ticketRepository.findAllforSale(page).forEach(el -> ticketDtos.add(ticketMapper.toDto(el)));
         return ticketDtos;
     }
@@ -121,5 +125,27 @@ public class TicketService {
         return tickets;
     }
 
+   public void update(EditTicketDto ticketDto) throws TIcketNotFoundException {
+       if (ticketRepository.findById(ticketDto.getTicketId()) == null) {
+           throw new TIcketNotFoundException("Билет не найден!");
+       } else {
+           Ticket ticket = Ticket.builder()
+                   .price(ticketDto.getPrice())
+                   .ticketId(ticketDto.getTicketId())
+                   .seatNumber(ticketDto.getSeatNumber())
+                   .departureDate(ticketDto.getDepartureDate())
+                   .build();
+           ticketRepository.update(ticket, ticketDto.getRouteId());
+           log.info("Билет изменён - " + ticket);
+       }
+   }
 
+   public void addTicket(TicketDto ticketDto) {
+       ticketRepository.createTicket(ticketMapper.toTicket(ticketDto));
+       log.info("Добавлен новый билет - " + ticketDto);
+   }
+
+   public void deleteTicketById(long ticketId) {
+        ticketRepository.deleteById(ticketId);
+   }
 }

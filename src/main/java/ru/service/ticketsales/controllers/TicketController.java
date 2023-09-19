@@ -5,12 +5,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.service.ticketsales.dto.EditTicketDto;
 import ru.service.ticketsales.dto.ErrorResponseDto;
 import ru.service.ticketsales.dto.TicketDto;
+import ru.service.ticketsales.exceptions.TIcketNotFoundException;
 import ru.service.ticketsales.exceptions.TicketIsBuyedException;
 import ru.service.ticketsales.models.Ticket;
 import ru.service.ticketsales.repository.TicketRepository;
@@ -22,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tickets")
 @RequiredArgsConstructor
+@Slf4j
 public class TicketController {
 
     private final TicketService ticketService;
@@ -56,6 +60,7 @@ public class TicketController {
             ticketService.buyTicket(ticketId);
             return ResponseEntity.ok().build();
         } catch (TicketIsBuyedException e) {
+            log.error(e.getMessage(),e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
                     .codeStatus(400)
                     .message(e.getMessage())
@@ -226,6 +231,55 @@ public class TicketController {
                         .getAllByDepartureDateAndDestination(departureDate,
                                 destinationPoint,
                                 page));
+    }
+
+
+    @PatchMapping("/update")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @Operation(summary = "Редактировать билет")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!"),
+            @ApiResponse(responseCode = "404", description = "Билет не найден.")
+    })
+    public ResponseEntity<?> updateTicket(@RequestBody EditTicketDto ticketDto) {
+        try {
+            ticketService.update(ticketDto);
+        } catch (TIcketNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
+                    .codeStatus(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+        return ResponseEntity.ok("Билет успешно изменён");
+    }
+
+    @DeleteMapping("/delete")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @Operation(summary = "Удалить билет по id из БД")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!"),
+            @ApiResponse(responseCode = "404", description = "Билет не найден.")
+    })
+    public ResponseEntity<?> deleteTicketById(@RequestParam long ticketId) {
+        ticketService.deleteTicketById(ticketId);
+        return ResponseEntity.ok("Билет удалён");
+    }
+
+    @PostMapping("/add")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @Operation(summary = "Добавить билет")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос прошёл успешно"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещён!!!")
+    })
+    public ResponseEntity<?> addTicket(@RequestBody TicketDto ticketDto) {
+        ticketService.addTicket(ticketDto);
+        return ResponseEntity.ok("Билет успешно добавлен");
     }
 }
 

@@ -37,6 +37,23 @@ public class TicketRepository {
         return jdbcTemplate.queryForObject(sql, source, Long.class);
     }
 
+    public void update(Ticket ticket, long routeId) {
+        String sql = "UPDATE tickets set " +
+                "ticket_id = :ticket_id," +
+                "route_id = :route_id," +
+                "departure_date = :departure_date," +
+                "seat_number = :seat_number," +
+                "price = :price " +
+                "where ticket_id = :ticket_id";
+        MapSqlParameterSource source = new MapSqlParameterSource()
+                .addValue("ticket_id",ticket.getTicketId())
+                .addValue("route_id", routeId)
+                .addValue("departure_date", ticket.getDepartureDate())
+                .addValue("seat_number", ticket.getSeatNumber())
+                .addValue("price", ticket.getPrice());
+        jdbcTemplate.update(sql, source);
+    }
+
     public void addTicketToUser(UserBuyer buyer, long ticketId) {
         String sql = "UPDATE tickets SET " +
                 "user_id = :user_id " +

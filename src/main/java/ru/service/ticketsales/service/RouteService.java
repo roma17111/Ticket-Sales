@@ -1,6 +1,7 @@
 package ru.service.ticketsales.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.service.ticketsales.dto.NewRouteDto;
 import ru.service.ticketsales.dto.RouteDto;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RouteService {
 
     private final RouteRepository routeRepository;
@@ -39,6 +41,7 @@ public class RouteService {
                 );
             }
             routeRepository.deleteById(routeId);
+            log.info("Маршрут удалён -" + route);
         }
     }
 
@@ -54,6 +57,7 @@ public class RouteService {
                 .durationInMinutes(routeDto.getDurationInMinutes())
                 .build();
         routeRepository.save(route);
+        log.info("Маршрут создан -" + route);
     }
 
     public void update(RouteDto route) throws RouteNotFoundException {
@@ -61,6 +65,7 @@ public class RouteService {
             throw new  RouteNotFoundException("Маршрут не найден");
         }
         routeRepository.updateRoute(routeMapper.toRoute(route));
+        log.info("Маршрут изменён -" + route);
     }
 
     public List<RouteDto>   findAll(long page) {

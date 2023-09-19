@@ -12,14 +12,11 @@ import java.time.LocalDateTime;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TicketDto {
+public class EditTicketDto {
 
     long ticketId;
-    RouteDto route;
+    long routeId;
     LocalDateTime departureDate;
     String seatNumber;
     long price;
-    @JsonIgnore
-    UserBuyerDto user;
-    LocalDateTime buyDate;
 }
