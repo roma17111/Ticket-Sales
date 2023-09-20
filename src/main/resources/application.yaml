@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://хост/база
-    username: user
-    password: 69701
+    username: не скажу
+    password: Тоже не скажу
   liquibase:
     enabled: true
     change-log: db/changelog/master.yaml
