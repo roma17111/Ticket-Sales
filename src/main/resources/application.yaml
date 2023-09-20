@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://хост/база
+    username: user
+    password: 69701
+  liquibase:
+    enabled: true
+    change-log: db/changelog/master.yaml
+redis:
+  host: 81.177.140.236
+  port: 6379
+  pass: пароль
+
+
+jwt:
+  secret:
+    refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
+    access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
+server:
+  ssl:
+    enabled: false
+    key-store: ssl/keystore.p12
+    key-store-password: пароль
+    key-store-type: PKCS12
+    key-alias: tomcat
