@@ -235,6 +235,12 @@ public class TicketRepository {
         return jdbcTemplate.query(sql, source,this.ticketRowMapper);
     }
 
+    public long count(long userId) {
+        String sql = "select count(*)from tickets where user_id = :user_id";
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource("user_id",userId);
+        return jdbcTemplate.queryForObject(sql,sqlParameterSource,Long.class);
+    }
+
     public void deleteById(long ticketId) {
         String sql = "DELETE FROM tickets WHERE ticket_id = :ticket_id";
         MapSqlParameterSource source = new MapSqlParameterSource("ticket_id", ticketId);

@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.service.ticketsales.security.Role;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Data
@@ -11,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserBuyer {
+public class UserBuyer implements Serializable   {
 
     long userId;
     String login;

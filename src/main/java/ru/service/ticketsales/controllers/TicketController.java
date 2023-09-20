@@ -59,7 +59,7 @@ public class TicketController {
         try {
             ticketService.buyTicket(ticketId);
             return ResponseEntity.ok().build();
-        } catch (TicketIsBuyedException e) {
+        } catch (TicketIsBuyedException | TIcketNotFoundException e) {
             log.error(e.getMessage(),e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto.builder()
                     .codeStatus(400)
